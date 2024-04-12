@@ -19,14 +19,14 @@ let app = Vue.createApp({
 
             fetch(url)  //Send Request
                 .then(resp => {
-                    if (!response.ok) {
+                    if (!resp.ok) {
                         throw new Error('Login failed');
                     }
                     return resp.json();
                 })
                 .then(data => {
                     localStorage.setItem('authToken', data.token); //save key/value pairs in the browser --> key: authToke, value: data.token
-                    alert('Registration successful');
+                    alert('Login successful');
                     window.location.href = '/index.html';
                 })
                 .catch(error => { 
