@@ -8,7 +8,7 @@ class ToDo {
 }
 
 let app = Vue.createApp({
-    data(){
+    data() {
         return {
             //Todo Input values bidirectional binden --> schau demo von Full Stack
             todoColumns: ["ID", "Name", "Deadline", "Importance", "Done"],
@@ -17,7 +17,7 @@ let app = Vue.createApp({
         };
     },
     methods: {
-        addTodo : function(){
+        addTodo: function () {
             //Todo
         }
     }

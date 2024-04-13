@@ -21,7 +21,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get(["/login", "/register"], function(req, res, next) {
+app.get(["/login", "/register"], function (req, res, next) {
     res.sendFile(path.join(__dirname, 'public', '/login.html'));
 });
 
@@ -38,7 +38,7 @@ function verifyToken(req, res, next) {
             if (err) {
                 req.jwtVerifyError = true;
                 if (err.name === 'TokenExpiredError') {
-                    req.jwtExpired = true; 
+                    req.jwtExpired = true;
                 }
             } else {
                 req.jwtPayload = decoded;

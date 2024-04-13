@@ -29,15 +29,16 @@ let app = Vue.createApp({
                     alert('Login successful');
                     window.location.href = '/index.html';
                 })
-                .catch(error => { 
+                .catch(error => {
                     console.error('Error:', error);
                     alert('Login failed');
                 });
 
         },
         registerFetch() {
-            if(this.registerPassword != this.registerPasswordRepeat){
-                alert('Password and repeat Password differ');
+            if (this.registerPassword != this.registerPasswordRepeat) {
+                alert('Password and repeat password differ');
+                return;
             }
 
             const url = new URL('http://localhost:3000/user_handling/register'); //Route for registration
