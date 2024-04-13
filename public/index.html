@@ -39,22 +39,22 @@
         <form>
           <div class="form-group col-sm-3">
             <label for="name-input">Name:</label>
-            <input type="text" class="form-control" id="name-input" placeholder="Name">
+            <input type="text" class="form-control" :class="{ nothing: nameEmpty }" id="name-input" placeholder="Name" v-model="todoName">
           </div>
           <div class="form-group col-sm-3">
             <label for="deadline-input">Deadline:</label>
-            <input type="date" class="form-control" id="deadline-input">
+            <input type="date" class="form-control" :class="{ nothing: deadlineEmpty }" id="deadline-input" v-model="deadline">
           </div>
           <div class="form-group col-sm-3">
             <label for="importance-input">Importance:</label>
-            <select class="form-control" id="importance-input">
+            <select class="form-control" :class="{ nothing: importanceEmpty }" id="importance-input" v-model="importance">
               <option value="low">low</option>
               <option value="medium" selected="selected">medium</option>
               <option value="high">high</option>
             </select>
           </div>
         </form>
-        <button id="add-button" class="btn btn-secondary"><i class="material-icons"
+        <button id="add-button" class="btn btn-secondary" @click="addTodo"><i class="material-icons"
             style="font-size:20px">add</i></button>
       </div>
       <form class="form-control">
