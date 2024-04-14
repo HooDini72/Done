@@ -1,39 +1,48 @@
-.btn-primary{
-  background-color: lightslategray !important;
-  border-color:  lightslategray !important;
+.btn-primary {
+    background-color: lightslategray !important;
+    border-color: lightslategray !important;
 }
 
-#add-button, #delete-button{
-  width: 25px;
-  height: 25px;
-  margin: 2px;
-  position: relative;
+#add-button,
+#delete-button {
+    width: 25px;
+    height: 25px;
+    margin: 2px;
+    position: relative;
 }
 
-.btn-secondary{
-  padding: 1px 2px !important;
-  font-size: 15px !important;
+.btn-secondary {
+    padding: 1px 2px !important;
+    font-size: 15px !important;
 }
 
-.high{
-  color: red;
+.high {
+    color: red;
 }
 
-.medium{ 
-  color: blue;
+.medium {
+    color: blue;
 }
 
 #footer {
-  text-align: center;
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  background-color: #0c0c0c;
-  color: white;
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: #0c0c0c;
+    color: white;
 }
 
-.footer-links{
-  color: white;
+.footer-links {
+    color: white;
 }
 
 
+.nothing {
+    border-color: red !important;
+}
+
+.scrollable-table {
+    max-height: 400px; /* Beispielhöhe, anpassen nach Bedarf */
+    overflow-y: auto;
+}

@@ -27,7 +27,7 @@ let app = Vue.createApp({
                 .then(data => {
                     localStorage.setItem('authToken', data.token); //save key/value pairs in the browser --> key: authToke, value: data.token
                     alert('Login successful');
-                    window.location.href = '/index.html';
+                    window.location.href = '/index.html'; // transmit to main-page
                 })
                 .catch(error => {
                     console.error('Error:', error);
