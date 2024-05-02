@@ -7,10 +7,6 @@ var db = require('../database');
 
 const saltRounds = 10; //how often should be something encrypted
 
-const pwT = bcrypt.hash("testPW", saltRounds);
-const testUser1 = { mail: "test@mail.com", pw: pwT };
-const userListTesting = [testUser1];
-
 
 router.post('/login', async function (req, res, next) {
     const { mail, pw } = req.body;
@@ -53,13 +49,12 @@ router.post('/register', async function (req, res, next) {
         return res.status(400).send({ status: 'fail', message: 'Missing password' }); // 400 = bad request
     }
 
-    const existingUser = userListTesting.some(user => user.mail === mail);
+    const existingUser = await db.user.findUser(mail);
     if (existingUser) {
         res.status(409).send({ status: 'fail', message: 'User already exists' }); // 409 conflict
     } else {
         const hashedPw = await bcrypt.hash(pw, saltRounds);
         let newUser = await db.user.addUser({ mail, pw: hashedPw });
-        console.log(newUser);
         res.send({ status: 'success', message: 'Registration successful', id: newUser.insertedId });
     }
 });
