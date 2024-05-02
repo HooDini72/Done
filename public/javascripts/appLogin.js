@@ -9,59 +9,39 @@ let app = Vue.createApp({
         };
     },
     methods: {
-        loginFetch() {
-
-            const url = new URL('http://localhost:3000/user_handling/login'); //Route for login
-            url.search = new URLSearchParams({
-                mail: this.loginEmail,
-                pw: this.loginPassword
-            }).toString();
-
-            fetch(url)  //Send Request
-                .then(resp => {
-                    if (!resp.ok) {
-                        throw new Error('Login failed');
-                    }
-                    return resp.json();
-                })
-                .then(data => {
-                    localStorage.setItem('authToken', data.token); //save key/value pairs in the browser --> key: authToke, value: data.token
-                    alert('Login successful');
-                    window.location.href = '/index.html'; // transmit to main-page
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Login failed');
-                });
+        login() {
+            const url = 'http://localhost:3000/user_handling/login';
+            axios.post(url, { mail: this.loginEmail, pw: this.loginPassword })
+              .then(response => {
+                const { token, expiresAt } = response.data;
+                localStorage.setItem('token', token);
+                localStorage.setItem('expiresAt', expiresAt);
+                alert('Login successful');
+                window.location.href = '/index.html';
+              })
+              .catch(error => {
+                //Todo replace with toast
+                alert("Login failed");
+              });
 
         },
-        registerFetch() {
+        register() {
             if (this.registerPassword != this.registerPasswordRepeat) {
                 alert('Password and repeat password differ');
                 return;
             }
 
-            const url = new URL('http://localhost:3000/user_handling/register'); //Route for registration
-            url.search = new URLSearchParams({
-                mail: this.registerEmail,
-                pw: this.registerPassword
-            }).toString();
-
-            fetch(url)
-                .then(resp => {
-                    if (!resp.ok) {
-                        throw new Error('Registration failed');
-                    }
-                    return resp.json();
-                })
-                .then(data => {
-                    alert('Registration successful');
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Registration failed');
-                });
+            const url = 'http://localhost:3000/user_handling/register';
+            axios.post(url, { mail: this.registerEmail, pw: this.registerPassword })
+              .then(response => {
+                //Todo replace with toast
+                alert('Registration successful');
+              })
+              .catch(error => {
+                alert("Registration failed");
+            });
         }
     }
 
-}).mount("#app");
+});
+app.mount("#app");

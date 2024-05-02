@@ -3,6 +3,7 @@ var express = require('express');
 var bcrypt = require('bcrypt');
 var router = express.Router();
 var jwt = require('jsonwebtoken');
+var db = require('../database');
 
 const saltRounds = 10; //how often should be something encrypted
 
@@ -11,8 +12,8 @@ const testUser1 = { mail: "test@mail.com", pw: pwT };
 const userListTesting = [testUser1];
 
 
-router.get('/login', async function (req, res, next) {
-    const { mail, pw } = req.query;
+router.post('/login', async function (req, res, next) {
+    const { mail, pw } = req.body;
 
     // Check if data is missing
     if (!mail && !pw) {
@@ -23,7 +24,8 @@ router.get('/login', async function (req, res, next) {
         return res.status(400).send({ status: 'fail', message: 'Missing password' }); // 400 = bad request
     }
 
-    const user = userListTesting.find(user => user.mail === mail);
+    const user = await db.user.findUser(mail);
+    console.log(user);
     if (user) {
         const checkPW = await bcrypt.compare(pw, (await user.pw).toString()); //ToDo: ask hwo i can fix this toString!
         if (checkPW) {
@@ -39,8 +41,8 @@ router.get('/login', async function (req, res, next) {
 
 });
 
-router.get('/register', async function (req, res, next) {
-    const { mail, pw } = req.query;
+router.post('/register', async function (req, res, next) {
+    const { mail, pw } = req.body
 
     // Check if data is missing
     if (!mail && !pw) {
@@ -56,8 +58,9 @@ router.get('/register', async function (req, res, next) {
         res.status(409).send({ status: 'fail', message: 'User already exists' }); // 409 conflict
     } else {
         const hashedPw = await bcrypt.hash(pw, saltRounds);
-        userListTesting.push({ mail, pw: hashedPw }); 
-        res.send({ status: 'success', message: 'Registration successful' });
+        let newUser = await db.user.addUser({ mail, pw: hashedPw });
+        console.log(newUser);
+        res.send({ status: 'success', message: 'Registration successful', id: newUser.insertedId });
     }
 });
 
