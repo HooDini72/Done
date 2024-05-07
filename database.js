@@ -1,5 +1,5 @@
 require('dotenv').config();
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 const uri = process.env.DB_CON;
 const client = new MongoClient(uri);
@@ -12,18 +12,22 @@ async function connectToDB() {
     db = client.db('Done');
     users = db.collection('users');
     todos = db.collection('todos');
+    await db.command({ ping: 1 });
+    console.log("Pinged DB successfully, connected to MongoDB!");
 }
 
 async function getTodosForUser(mail) {
-
+    return await todos.find({mail: mail}).toArray();
 }
 
-async function addTodo(mail) {
-    
+async function addTodo(todo) {
+    return await todos.insertOne(todo);
 }
 
-async function removeTodo(mail){
-    
+async function removeTodos(mail, ids) {
+    let idOb = [];
+    ids.forEach((i) => idOb.push(ObjectId.createFromHexString(i))); // create ObjectId array
+    return await todos.deleteMany({mail: mail, _id: { $in: idOb } });
 }
 
 async function findUser(mail) {
@@ -48,6 +52,6 @@ module.exports = {
     todos: {
         getTodosForUser,
         addTodo,
-        removeTodo
+        removeTodos
     }
 }

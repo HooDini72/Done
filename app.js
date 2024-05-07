@@ -12,6 +12,7 @@ if (!jwtSecret) {
 }
 */
 var userRouter = require('./routes/user');
+var apiRouter = require('./routes/api');
 
 var app = express();
 
@@ -52,5 +53,6 @@ function verifyToken(req, res, next) {
 
 app.use(verifyToken);
 app.use('/user_handling', userRouter);
+app.use('/api', apiRouter);
 
 module.exports = app;
