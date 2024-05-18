@@ -26,32 +26,50 @@ app.get(["/login", "/register"], function (req, res, next) {
     res.sendFile(path.join(__dirname, 'public', '/login.html'));
 });
 
-function verifyToken(req, res, next) {
-    const token = req.headers['authorization'];
+function verifyRequest(req) {
+    let token = req.headers['authorization'];
     req.jwtProvided = false;
     req.jwtVerifyError = false;
     req.jwtExpired = false;
     req.jwtPayload = null;
 
     if (token) {
+        console.log(`> Authorization: Token "${token}" provided as Authorization-header`)
+        token = token.replace("Bearer ", "")
         req.jwtProvided = true;
-        jwt.verify(token, jwtSecret, (err, decoded) => {
+        jwt.verify(token, process.env.ACCESS_TOKE_SECRET, (err, decoded) => {
             if (err) {
                 req.jwtVerifyError = true;
+                // Check if the error is because the JWT has expired
                 if (err.name === 'TokenExpiredError') {
-                    req.jwtExpired = true;
+                    req.jwtExpired = true; // You can add this line to indicate specifically that the JWT expired
                 }
             } else {
+                // console.log("JWT: ", decoded)
                 req.jwtPayload = decoded;
             }
-            next();
         });
     } else {
-        next();
+        console.log("> Authorization: No token provided as Authorization-header")
     }
 }
 
-app.use(verifyToken);
+function verifyMiddleware(req, res, next) {
+    console.log(`Verify token on request to ${req.url}`)
+    verifyRequest(req)
+    if(!req.jwtProvided) {
+      console.log(`>>> Not authorized, no token provided`)
+    } else if(req.jwtProvided && !req.jwtVerifyError) {
+      console.log(`>>> Authorized`)
+    } else if(req.jwtProvided && req.jwtVerifyError && req.jwtExpired) {
+      console.log(`>>> Not authorized, token expired`)
+    } else {
+      console.log(`>>> Not authorized, error during token verification`)
+    }
+    next()
+  }
+
+app.use(verifyMiddleware);
 app.use('/user_handling', userRouter);
 app.use('/api', apiRouter);
 

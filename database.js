@@ -30,6 +30,10 @@ async function removeTodos(mail, ids) {
     return await todos.deleteMany({mail: mail, _id: { $in: idOb } });
 }
 
+async function setDone(ids){
+    
+}
+
 async function findUser(mail) {
     return await users.findOne({ mail: mail });
 }

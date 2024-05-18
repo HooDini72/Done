@@ -16,6 +16,7 @@ let app = Vue.createApp({
                 const { token, expiresAt } = response.data;
                 localStorage.setItem('token', token);
                 localStorage.setItem('expiresAt', expiresAt);
+                localStorage.setItem('mail', this.loginEmail);
                 alert('Login successful');
                 window.location.href = '/index.html';
               })

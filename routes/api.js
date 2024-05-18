@@ -15,7 +15,7 @@ function isLoggedIn(req, res, next) {
   next();
 }
 
-router.get('/get/todos/:mail', async (req, res) => {
+router.get('/get/todos/:mail', isLoggedIn, async (req, res) => {
   const {mail} = req.params;
   try {
     res.json(await db.todos.getTodosForUser(mail));
@@ -26,7 +26,7 @@ router.get('/get/todos/:mail', async (req, res) => {
 });
 
 
-router.post('/add/todo/:mail', async (req, res) => {
+router.post('/add/todo/:mail', isLoggedIn, async (req, res) => {
   const { todo } = req.body;
 
   if (todo.mail === undefined ||
@@ -45,7 +45,7 @@ router.post('/add/todo/:mail', async (req, res) => {
   }
 });
 
-router.delete('/remove/todos/:mail', async (req, res) => {
+router.delete('/remove/todos/:mail',isLoggedIn, async (req, res) => {
     const {ids} = req.body;
     const {mail} = req.params;
     res.json(await db.todos.removeTodos(mail, ids));
