@@ -21,13 +21,12 @@ router.post('/login', async function (req, res, next) {
     }
 
     const user = await db.user.findUser(mail);
-    console.log(user);
     if (user) {
         const checkPW = await bcrypt.compare(pw, (await user.pw).toString()); //ToDo: ask hwo i can fix this toString!
         if (checkPW) {
             const dataForToken = { mail: user.mail }; //No private secret information within the token!!
             const token = jwt.sign(dataForToken, process.env.ACCESS_TOKE_SECRET, { expiresIn: '1h' });
-            res.send({ status: 'success', message: 'Login successful', token: token });
+            res.send({ status: 'success', message: 'Login successful', token: token, expiresAt: Date.now() + 3600000 });
         } else {
             res.status(401).send({ status: 'fail', message: 'Invalid credentials' }); //401 = unauthorized
         }

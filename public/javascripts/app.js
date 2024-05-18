@@ -12,9 +12,9 @@ let app = Vue.createApp({
     data() {
         return {
             //Todo Input values bidirectional binden --> schau demo von Full Stack
-            todoColumns: ["ID", "Name", "Deadline", "Importance", "Done"],
+            todoColumns: ["Name", "Deadline", "Importance", "Done"],
             closeToDeadlineCol: ["Name", "Deadline"],
-            todos: [new ToDo("Full Stack", "2024-04-09", "high", false), new ToDo("SW2", "2024-05-09", "medium", false), new ToDo("SW1", "2024-05-09", "low", true)],
+            todos: [],
             todoName: "",
             deadline: new Date().toISOString().slice(0, 10), // current date
             importance: "medium",
@@ -22,10 +22,31 @@ let app = Vue.createApp({
             deadlineEmpty: false,
             importanceEmpty: false,
             checked: [false, false, false],
-            allChecked: false
+            allChecked: false,
+            jwt: {
+                token: localStorage.getItem("token"),
+                expiresAt: localStorage.getItem("expiresAt") ? new Date(+localStorage.getItem("expiresAt")) : null
+            },
+            mail: localStorage.getItem("mail"),
         };
     },
+    mounted(){
+        if(this.jwt.token){
+            this.getTodos();
+        }
+    },
     methods: {
+        authorizationHeader() {
+            return this.jwt.token ? { 'Authorization': `Bearer ${this.jwt.token}` } : {};
+        },
+        getTodos(){
+            const url = "http://localhost:3000/api/get/todos/" + this.mail;
+            axios.get(url, { headers: this.authorizationHeader() })
+            .then(resp => {
+                this.todos = resp.data;
+            })
+            .catch(error => alert(`Failed to fetch todos\nCode: ${error.code}\nMessage: ${error.message}\nResponse: ${JSON.stringify(error.response, null, 2)}`));
+        },
         addTodo: function () {
             if (!this.todoName) {
                 this.nameEmpty = true;
