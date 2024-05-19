@@ -1,5 +1,7 @@
+
 class ToDo {
-    constructor(name, deadline, importance, done) {
+    constructor(id, name, deadline, importance, done) {
+        this.id = id;
         this.name = name;
         this.deadline = deadline;
         this.importance = importance;
@@ -30,8 +32,13 @@ let app = Vue.createApp({
             mail: localStorage.getItem("mail"),
         };
     },
+    computed: {
+        loggedIn: function() {
+            return this.jwt.token && this.jwt.expiresAt && this.jwt.expiresAt > new Date();
+          }
+    },
     mounted(){
-        if(this.jwt.token){
+        if(this.jwt.token && this.jwt.expiresAt && this.jwt.expiresAt > new Date()){
             this.getTodos();
         }
     },
@@ -62,9 +69,24 @@ let app = Vue.createApp({
             this.nameEmpty = false;
             this.deadlineEmpty = false;
             this.importanceEmpty = false;
-            let newTodo = new ToDo(this.todoName, this.deadline, this.importance, false);
-            this.checked.push(false);
-            this.todos.push(newTodo);
+
+            let reqTodo = {
+                mail: this.mail,
+                name: this.todoName,
+                deadline: this.deadline,
+                importance: this.importance,
+                done: false
+            };
+            const url = "http://localhost:3000/api/add/todo/" + this.mail;
+            axios.post(url, {todo: reqTodo}, {headers: this.authorizationHeader()})
+            .then(resp => {
+                console.log(resp);
+                let newTodo = new ToDo(resp.data.insertedId, this.todoName, this.deadline, this.importance, false);
+                this.checked.push(false);
+                this.todos.push(newTodo);
+            })
+            .catch(error => alert(`Failed to add todo \nCode: ${error.code}\nMessage: ${error.message}\nResponse: ${JSON.stringify(error.response, null, 2)}`));
+         
         },
         checkAll: function () {
             for (let i = 0; i < this.checked.length; i++) {
