@@ -29,7 +29,8 @@ router.get('/get/todos/:mail', isLoggedIn, async (req, res) => {
 router.post('/add/todo/:mail', isLoggedIn, async (req, res) => {
   const { todo } = req.body;
 
-  if (todo.mail === undefined ||
+  if (todo === undefined ||
+    todo.mail === undefined ||
     todo.name === undefined ||
     todo.deadline === undefined ||
     todo.importance === undefined ||
