@@ -33,7 +33,6 @@ function verifyRequest(req) {
     req.jwtExpired = false;
     req.jwtPayload = null;
 
-    console.log("toke: " + token)
     if (token) {
         console.log(`> Authorization: Token "${token}" provided as Authorization-header`)
         token = token.replace("Bearer ", "")

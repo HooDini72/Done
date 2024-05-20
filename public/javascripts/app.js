@@ -1,7 +1,7 @@
 
 class ToDo {
-    constructor(id, name, deadline, importance, done) {
-        this.id = id;
+    constructor(_id, name, deadline, importance, done) {
+        this._id = _id;
         this.name = name;
         this.deadline = deadline;
         this.importance = importance;
@@ -23,7 +23,7 @@ let app = Vue.createApp({
             nameEmpty: false,
             deadlineEmpty: false,
             importanceEmpty: false,
-            checked: [false, false, false],
+            checked: [],
             allChecked: false,
             jwt: {
                 token: localStorage.getItem("token"),
@@ -50,7 +50,11 @@ let app = Vue.createApp({
             const url = "http://localhost:3000/api/get/todos/" + this.mail;
             axios.get(url, { headers: this.authorizationHeader() })
             .then(resp => {
+                console.log(resp.data);
                 this.todos = resp.data;
+                for(let i = 0; i < this.todos.length; i++){
+                    this.checked.push(false);
+                }
             })
             .catch(error => alert(`Failed to fetch todos\nCode: ${error.code}\nMessage: ${error.message}\nResponse: ${JSON.stringify(error.response, null, 2)}`));
         },
@@ -95,15 +99,22 @@ let app = Vue.createApp({
         },
         deleteTodo: function () {
             let i = this.checked.length-1; // vice versa, so that the indices don't shift when removed
+            let toDelet= [];
             while(i >= 0 ){
-                console.log(i);
                 if (this.checked[i]) {
+                    toDelet.push(this.todos[i]._id);
                     this.checked.splice(i, 1);
                     this.todos.splice(i, 1);
                 }
                 i--;
             }
             this.allChecked = false;
+            const url = "http://localhost:3000/api/remove/todos/" + this.mail;
+            axios.delete(url, {headers: this.authorizationHeader(), data: {ids: toDelet}})
+            .then(resp => {
+                console.log(resp)
+            })
+            .catch(error => alert(`Failed to remove todos \nCode: ${error.code}\nMessage: ${error.message}\nResponse: ${JSON.stringify(error.response, null, 2)}`))
         }
     }
 

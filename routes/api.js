@@ -49,6 +49,10 @@ router.post('/add/todo/:mail', isLoggedIn, async (req, res) => {
 router.delete('/remove/todos/:mail',isLoggedIn, async (req, res) => {
     const {ids} = req.body;
     const {mail} = req.params;
+    if(ids === undefined || mail === undefined){
+      return res.status(400).send("Missing information");
+    }
+    
     res.json(await db.todos.removeTodos(mail, ids));
 });
 
