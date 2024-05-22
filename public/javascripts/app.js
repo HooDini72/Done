@@ -17,6 +17,7 @@ let app = Vue.createApp({
             todoColumns: ["Name", "Deadline", "Importance", "Done"],
             closeToDeadlineCol: ["Name", "Deadline"],
             todos: [],
+            closeToDeadline: [],
             todoName: "",
             deadline: new Date().toISOString().slice(0, 10), // current date
             importance: "medium",
@@ -50,10 +51,14 @@ let app = Vue.createApp({
             const url = "http://localhost:3000/api/get/todos/" + this.mail;
             axios.get(url, { headers: this.authorizationHeader() })
             .then(resp => {
-                console.log(resp.data);
                 this.todos = resp.data;
                 for(let i = 0; i < this.todos.length; i++){
                     this.checked.push(false);
+                    let delta = new Date((this.todos[i].deadline)).getTime() - new Date().getTime(); //
+                    let days = Math.round(delta / (1000 * 3600 * 24) + 1);
+                    if(days <= 5){
+                        this.closeToDeadline.push(this.todos[i]);
+                    }
                 }
             })
             .catch(error => alert(`Failed to fetch todos\nCode: ${error.code}\nMessage: ${error.message}\nResponse: ${JSON.stringify(error.response, null, 2)}`));
@@ -84,10 +89,15 @@ let app = Vue.createApp({
             const url = "http://localhost:3000/api/add/todo/" + this.mail;
             axios.post(url, {todo: reqTodo}, {headers: this.authorizationHeader()})
             .then(resp => {
-                console.log(resp);
                 let newTodo = new ToDo(resp.data.insertedId, this.todoName, this.deadline, this.importance, false);
                 this.checked.push(false);
                 this.todos.push(newTodo);
+                let delta =  new Date((newTodo.deadline)).getTime() - new Date().getTime(); 
+                let days = Math.round(delta / (1000 * 3600 * 24) + 1);
+                if(days <= 5){
+                    this.closeToDeadline.push(newTodo);
+                }
+                this.todoName = "";
             })
             .catch(error => alert(`Failed to add todo \nCode: ${error.code}\nMessage: ${error.message}\nResponse: ${JSON.stringify(error.response, null, 2)}`));
          
@@ -97,6 +107,11 @@ let app = Vue.createApp({
                 this.checked[i] = !this.checked[i];
             }
         },
+        setDone: function(entry){
+            const url = "http://localhost:3000/api/set/done/" + this.mail;
+            axios.post(url, {id: entry._id, value: !entry.done}, {headers: this.authorizationHeader()})
+            .catch(error => alert(`Failed to set done \nCode: ${error.code}\nMessage: ${error.message}\nResponse: ${JSON.stringify(error.response, null, 2)}`));
+        },
         deleteTodo: function () {
             let i = this.checked.length-1; // vice versa, so that the indices don't shift when removed
             let toDelet= [];
@@ -104,6 +119,9 @@ let app = Vue.createApp({
                 if (this.checked[i]) {
                     toDelet.push(this.todos[i]._id);
                     this.checked.splice(i, 1);
+                    if(this.closeToDeadline.includes(this.todos[i])){
+                        this.closeToDeadline.splice(this.closeToDeadline.indexOf(this.todos[i]), 1);
+                    }
                     this.todos.splice(i, 1);
                 }
                 i--;
@@ -111,9 +129,6 @@ let app = Vue.createApp({
             this.allChecked = false;
             const url = "http://localhost:3000/api/remove/todos/" + this.mail;
             axios.delete(url, {headers: this.authorizationHeader(), data: {ids: toDelet}})
-            .then(resp => {
-                console.log(resp)
-            })
             .catch(error => alert(`Failed to remove todos \nCode: ${error.code}\nMessage: ${error.message}\nResponse: ${JSON.stringify(error.response, null, 2)}`))
         }
     }

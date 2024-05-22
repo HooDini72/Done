@@ -52,8 +52,18 @@ router.delete('/remove/todos/:mail',isLoggedIn, async (req, res) => {
     if(ids === undefined || mail === undefined){
       return res.status(400).send("Missing information");
     }
-    
     res.json(await db.todos.removeTodos(mail, ids));
+});
+
+router.post('/set/done/:mail',isLoggedIn, async (req, res) =>{ 
+    const {id, value} = req.body;
+    const {mail} = req.params;
+    console.log(id);
+    console.log(value);
+    if(id === undefined || mail === undefined || value === undefined){
+      return res.status(400).send("Missing information");
+    }
+    res.json(await db.todos.setDone(mail, id, value));
 });
 
 module.exports = router;

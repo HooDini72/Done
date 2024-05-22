@@ -77,10 +77,10 @@
                   <tr v-for="(entry, idx) in todos">
                     <td class="bs-checkbox"><label><input type="checkbox" v-model="checked[idx]"></label></td>
                     <td>{{entry.name}}</td>
-                    <td>{{entry.deadline.slice(0, 10)}}</td>
+                    <td>{{entry.deadline}}</td>
                     <td>{{entry.importance}}</td>
                     <td>
-                      <label><input class="form-check-input" type="checkbox" v-model="entry.done"></label>
+                      <label><input class="form-check-input" type="checkbox" v-model="entry.done" @click="setDone(entry)"></label>
                     </td>
                   </tr>
                 </tbody>
@@ -97,9 +97,9 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>Full Stack</td>
-                    <td>2024-04-09</td>
+                  <tr v-for="(entry) in closeToDeadline">
+                    <td>{{entry.name}}</td>
+                    <td>{{entry.deadline}}</td>
                   </tr>
                 </tbody>
               </table>

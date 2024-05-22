@@ -30,8 +30,8 @@ async function removeTodos(mail, ids) {
     return await todos.deleteMany({mail: mail, _id: { $in: idOb } });
 }
 
-async function setDone(ids){
-    
+async function setDone(mail, id, value){
+    todos.updateOne({mail: mail, _id: ObjectId.createFromHexString(id)}, {$set: {done: value}});
 }
 
 async function findUser(mail) {
@@ -56,6 +56,7 @@ module.exports = {
     todos: {
         getTodosForUser,
         addTodo,
-        removeTodos
+        removeTodos,
+        setDone
     }
 }
