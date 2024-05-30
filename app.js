@@ -4,6 +4,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
 var jwt = require('jsonwebtoken');
+const WebSocket = require('ws');
 /*
 const jwtSecret = process.env.JWT_SECRET;
 if (!jwtSecret) {
@@ -57,20 +58,23 @@ function verifyRequest(req) {
 function verifyMiddleware(req, res, next) {
     console.log(`Verify token on request to ${req.url}`)
     verifyRequest(req)
-    if(!req.jwtProvided) {
-      console.log(`>>> Not authorized, no token provided`)
-    } else if(req.jwtProvided && !req.jwtVerifyError) {
-      console.log(`>>> Authorized`)
-    } else if(req.jwtProvided && req.jwtVerifyError && req.jwtExpired) {
-      console.log(`>>> Not authorized, token expired`)
+    if (!req.jwtProvided) {
+        console.log(`>>> Not authorized, no token provided`)
+    } else if (req.jwtProvided && !req.jwtVerifyError) {
+        console.log(`>>> Authorized`)
+    } else if (req.jwtProvided && req.jwtVerifyError && req.jwtExpired) {
+        console.log(`>>> Not authorized, token expired`)
     } else {
-      console.log(`>>> Not authorized, error during token verification`)
+        console.log(`>>> Not authorized, error during token verification`)
     }
     next()
-  }
+}
 
 app.use(verifyMiddleware);
 app.use('/user_handling', userRouter);
 app.use('/api', apiRouter);
+
+
+
 
 module.exports = app;
