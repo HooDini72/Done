@@ -11,7 +11,8 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <script src="https://unpkg.com/vue@3"></script>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-
+  <script src="https://cdn.jsdelivr.net/npm/vue-toast-notification@3"></script>
+  <link href="https://cdn.jsdelivr.net/npm/vue-toast-notification@3/dist/theme-sugar.css" rel="stylesheet">
   <title>Done?</title>
 </head>
 
@@ -24,9 +25,6 @@
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item active">
               <a class="nav-link" href="#" onclick="">Home</a>
-            </li>
-            <li class="nav-item active">
-              <a class="nav-link" href="#" onclick="">Me</a>
             </li>
           </ul>
         </div>
@@ -65,7 +63,7 @@
         <div class="row">
           <div class="col" id="todo-section">
             <h4 id="todo-headline">ToDos</h4>
-            <div class=" scrollable-table">
+            <div class="scrollable-table">
               <table id="todo-table" class="table table-bordered table-hover">
                 <thead>
                   <tr>
@@ -107,11 +105,6 @@
           </div>
         </div>
       </form>
-    </div>
-    <div id="footer">
-      <h6>My Links:</h6>
-      <a class="footer-links" href="https://github.com/HooDini72"><i class="fa fa-github"
-          style="font-size:36px"></i></a>
     </div>
   </div>
   <script src="./javascripts/app.js"></script>

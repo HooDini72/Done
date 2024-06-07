@@ -24,7 +24,6 @@ let app = Vue.createApp({
                 //Todo replace with toast
                 alert("Login failed");
               });
-
         },
         register() {
             if (this.registerPassword != this.registerPasswordRepeat) {
@@ -41,6 +40,9 @@ let app = Vue.createApp({
               .catch(error => {
                 alert("Registration failed");
             });
+            this.registerEmail = "";
+            this.registerPassword = "";
+            this.registerPasswordRepeat = "";
         }
     }
 
