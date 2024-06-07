@@ -30,7 +30,6 @@ wss.on('connection', (client, req) => {
 
 function multicast(info, mail, sender) {
     const strInfo = JSON.stringify(info, null, 2);
-    console.log(`broadcasting ${strInfo} to clients interested in '${mail}'`);
     for (broadcastTarget of [...wss.clients].filter(c => c.interestedIn === mail)) {
         if (broadcastTarget.readyState === WebSocket.OPEN && broadcastTarget.socketID != sender) {
             broadcastTarget.send(strInfo);
@@ -82,7 +81,7 @@ router.post('/add/todo/:mail', isLoggedIn, async (req, res) => {
         res.json(newTodo);
     } catch (error) {
         res.status(500).send('Error add todo');
-        console.error(error)
+        console.error(error);
     }
 });
 

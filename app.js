@@ -38,7 +38,7 @@ function verifyRequest(req) {
         console.log(`> Authorization: Token "${token}" provided as Authorization-header`)
         token = token.replace("Bearer ", "")
         req.jwtProvided = true;
-        jwt.verify(token, process.env.ACCESS_TOKE_SECRET, (err, decoded) => {
+        jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
             if (err) {
                 req.jwtVerifyError = true;
                 // Check if the error is because the JWT has expired
