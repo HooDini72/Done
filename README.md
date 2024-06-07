@@ -25,5 +25,7 @@ node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 
 Note: Database (DB_CON) and ACCESS_TOKEN_SECRET for JWT is not included!
 e.g. .env:
+```.env
 ACCESS_TOKEN_SECRET=123456789
 DB_CON=mongodb+srv://SomeString.mongodb.net/...
+```
