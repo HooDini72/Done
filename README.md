@@ -12,7 +12,7 @@ npm install
 ```
 
 Create a file ".env" in your projekt (./Done/)
-## Put the following in a .env-file (the values in the example are placeholder!)
+## Put the following in the .env-file (the values in the example are placeholder!)
 ```.env
 ACCESS_TOKEN_SECRET=123456789
 DB_CON=mongodb+srv://SomeString.mongodb.net/...
@@ -27,8 +27,9 @@ node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 Copy the generated token in the .env-File as the value for ACCESS_TOKEN_SECRET.
 
 ## Database (MongoDB)
+The database has following name and collections.
 ```
-Database: Done
+Database-Name: Done
 Collections: todos, users
 ```
 Copy the connection link in the .env-File as the value for DB_CON.
