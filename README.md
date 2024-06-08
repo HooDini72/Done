@@ -4,6 +4,8 @@ Done is a small ToDo-Manager.
 
 # How to setup Done
 
+Note: you need nodeJS!
+
 ## Install Dependence:
 ```bash
 npm install
