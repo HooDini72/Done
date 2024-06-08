@@ -11,7 +11,7 @@ Note: you need nodeJS!
 npm install
 ```
 
-Create a file ".env" in your projekt (./Done/)
+Create a file ".env" in your project (./Done/)
 ## Put the following in the .env-file (the values in the example are placeholder!)
 ```.env
 ACCESS_TOKEN_SECRET=123456789
