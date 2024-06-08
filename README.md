@@ -30,8 +30,10 @@ Copy the generated token in the .env-File as the value for ACCESS_TOKEN_SECRET.
 The database has following name and collections.
 ```
 Database-Name: Done
-Collections: todos, users
+Collections: todos, users.
 ```
+e.g.: https://www.mongodb.com/products/platform/atlas-database
+
 Copy the connection link in the .env-File as the value for DB_CON.
 
 ## Start Backend 
