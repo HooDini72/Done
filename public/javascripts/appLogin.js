@@ -21,7 +21,6 @@ let app = Vue.createApp({
                 window.location.href = '/index.html';
               })
               .catch(error => {
-                //Todo replace with toast
                 alert("Login failed");
               });
         },
@@ -34,7 +33,6 @@ let app = Vue.createApp({
             const url = 'http://localhost:3000/user_handling/register';
             axios.post(url, { mail: this.registerEmail, pw: this.registerPassword })
               .then(response => {
-                //Todo replace with toast
                 alert('Registration successful');
               })
               .catch(error => {

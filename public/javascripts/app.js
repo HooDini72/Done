@@ -14,7 +14,6 @@ let app = Vue.createApp({
 
     data() {
         return {
-            //Todo Input values bidirectional binden --> schau demo von Full Stack
             todoColumns: ["Name", "Deadline", "Importance", "Done"],
             closeToDeadlineCol: ["Name", "Deadline"],
             todos: [],
