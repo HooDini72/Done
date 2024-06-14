@@ -47,6 +47,12 @@ let app = Vue.createApp({
         }
     },
     methods: {
+        logout: function () {
+            localStorage.setItem('token', null);
+            localStorage.setItem('expiresAt', null);
+            localStorage.setItem('mail', null);
+            location.reload();
+        },
         setupWebSocket() {
             const url = "ws://localhost:3002";
             this.webSocket = new WebSocket(url);
@@ -64,8 +70,8 @@ let app = Vue.createApp({
             this.webSocket.onmessage = function (event) {
                 const message = JSON.parse(event.data);
                 const { type, op, id, entity } = message;
-                switch(op){
-                   case 'reg':
+                switch (op) {
+                    case 'reg':
                         vue.socketID = entity.socketID;
                         break;
                     case 'add':
@@ -127,7 +133,7 @@ let app = Vue.createApp({
                 done: false,
             };
             const url = "http://localhost:3000/api/add/todo/" + this.mail;
-            axios.post(url, { todo: reqTodo, socketID: this.socketID}, { headers: this.authorizationHeader() })
+            axios.post(url, { todo: reqTodo, socketID: this.socketID }, { headers: this.authorizationHeader() })
                 .then(resp => {
                     let newTodo = new ToDo(resp.data.insertedId, this.todoName, this.deadline, this.importance, false);
                     this.checked.push(false);
@@ -167,22 +173,22 @@ let app = Vue.createApp({
             axios.delete(url, { headers: this.authorizationHeader(), data: { ids: toDelet, socketID: this.socketID } })
                 .catch(error => alert(`Failed to remove todos \nCode: ${error.code}\nMessage: ${error.message}\nResponse: ${JSON.stringify(error.response, null, 2)}`))
         },
-        checkDeadline: function(todo){
+        checkDeadline: function (todo) {
             let delta = new Date((todo.deadline)).getTime() - new Date().getTime();
             let days = Math.round(delta / (1000 * 3600 * 24) + 1);
             if (days <= 5) {
                 this.closeToDeadline.push(todo);
             }
         },
-        addToDoLocal: function(todo){
+        addToDoLocal: function (todo) {
             this.todos.push(todo);
             this.checked.push(false);
             this.checkDeadline(todo);
         },
-        removeToDoLocal: function(ids){
+        removeToDoLocal: function (ids) {
             let i = this.checked.length - 1; // vice versa, so that the indices don't shift when removed
-            while(i >= 0){
-                if(ids.includes(this.todos[i]._id)){
+            while (i >= 0) {
+                if (ids.includes(this.todos[i]._id)) {
                     this.checked.splice(i, 1);
                     if (this.closeToDeadline.includes(this.todos[i])) {
                         this.closeToDeadline.splice(this.closeToDeadline.indexOf(this.todos[i]), 1);
@@ -192,7 +198,7 @@ let app = Vue.createApp({
                 i--;
             }
         },
-        setDoneLocal: function(id, value){
+        setDoneLocal: function (id, value) {
             this.todos.filter(e => e._id === id)[0].done = value;
         }
     }
